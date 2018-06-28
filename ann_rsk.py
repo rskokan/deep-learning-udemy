@@ -22,7 +22,7 @@ X[:, 2] = labelencoder_X_2.fit_transform(X[:, 2])
 onehotencoder = OneHotEncoder(categorical_features = [1])
 X = onehotencoder.fit_transform(X).toarray()
 
-# Avoid the DUmmy variable trap
+# Avoid the Dummy variable trap
 X = X[:, 1:]
 
 
@@ -52,7 +52,7 @@ classifier = Sequential()
 classifier.add(Dense(6, kernel_initializer='uniform', activation='relu', input_dim=11))
 
 # 2nd hidden layer
-classifier.add(Dense(6, kernel_initializer='uniform', activation='relu'))
+classifier.add(Dense(10, kernel_initializer='uniform', activation='relu'))
 
 # Output layer; 1 output node: the client leaves the bank or not; Sigmoid activation func so that we know the probability of the client leaving
 classifier.add(Dense(1, kernel_initializer='uniform', activation='sigmoid'))
@@ -81,3 +81,18 @@ cm = confusion_matrix(y_test, y_pred)
 correct_predictions = cm[0, 0] + cm[1, 1]
 accuracy = correct_predictions / len(X_test)
 print('The prediction accuracy is {}%'.format(accuracy * 100))
+
+
+
+################################################
+################ Homework ################
+# CreditScore,Geography,Gender,Age,Tenure,Balance,NumOfProducts,HasCrCard,IsActiveMember,EstimatedSalary
+# x,x,x,600,France,Male,40,3,60000,2,1,1,50000,x
+X_hw = np.array([[0.0, 1, 600, 1, 40, 3, 60000, 2, 1, 1, 50000]])
+
+# Scale with the original scaler used to train the model
+X_hw = sc.transform(X_hw)
+
+y_hw = classifier.predict(X_hw)
+y_hw_bool = (y_hw > 0.5)
+print('The client is going to leave the bank: {}. The probability of leaving is {}%'.format(y_hw_bool, y_hw))
